@@ -1,0 +1,6 @@
+[submodule "include/external/wallet-core-nx"]
+	path = include/external/wallet-core-nx
+	url = https://github.com/i0x0/wallet-core-nx
+[submodule "include/external/uBitcoin"]
+	path = include/external/uBitcoin
+	url = https://github.com/micro-bitcoin/uBitcoin.git
