@@ -45,8 +45,6 @@ SOURCES		:=	source
 DATA		:=	data
 INCLUDES	:=	include
 EXEFS_SRC	:=	exefs_src
-#ROMFS	:=	romfs
-
 
 ROMFS				:=	resources
 BOREALIS_RESOURCES	:=	romfs:/
@@ -68,19 +66,33 @@ INCLUDES	+=	include/external/borealis/library/include \
 				include/external/borealis/library/lib/extern/fmt/include \
 				include/external/borealis/library/include/borealis/extern
 
-#--------------------------------------
-# ubitcoin
-#--------------------------------------
+#------------------------------------
+# wallet core includes
+#------------------------------------
 
-SOURCES 	+=	include/external/uBitcoin/src \
-				include/external/uBitcoin/src/utility/ \
-				include/external/uBitcoin/src/utility/trezor
+SOURCES		+= include/external/wallet-core/include \
+			   include/external/wallet-core/src \
+			   include/external/wallet-core/build/local/include \
+				 include/external/wallet-core/trezor-crypto/include/TrezorCrypto \
+				 include/external/wallet-core/trezor-crypto/include \
+				 include/external/wallet-core/trezor-crypto/src \
 
-INCLUDES 	+=	include/external/uBitcoin/src \
-				include/external/uBitcoin/src/utility/ \
-				include/external/uBitcoin/src/utility/trezor
 
 
+INCLUDES	+= include/external/wallet-core/include \
+			   include/external/wallet-core/src \
+			   include/external/wallet-core/build/local/include \
+				 include/external/wallet-core/trezor-crypto/include/TrezorCrypto \
+				 include/external/wallet-core/trezor-crypto/include \
+				 include/external/wallet-core/trezor-crypto/src
+
+#------------------------------------
+# the all mighty boost includes
+#------------------------------------
+
+SOURCES		+= include/external/boost
+
+INCLUDES  += include/external/boost
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -93,7 +105,7 @@ CFLAGS	:=	-g -Wall -O3 -ffunction-sections \
 			-DVERSION_MINOR=${VERSION_MINOR} \
 			-DVERSION_MICRO=${VERSION_MICRO}
 
-CFLAGS	+=	$(INCLUDE) -D__SWITCH__ \
+CFLAGS	+=	$(INCLUDE) -D__SWITCH__  \
 			-DBOREALIS_RESOURCES="\"$(BOREALIS_RESOURCES)\"" \
 			-DAPP_VERSION="\"$(APP_VERSION)\""
 
@@ -102,7 +114,7 @@ CXXFLAGS	:= $(CFLAGS) -std=c++1z -DUSE_STDONLY
 ASFLAGS	:=	-g $(ARCH)
 LDFLAGS	=	-specs=$(DEVKITPRO)/libnx/switch.specs -g $(ARCH) -Wl,-no-as-needed,-Map,$(notdir $*.map)
 
-LIBS	:= -lnx
+LIBS	:= -lglfw3 -lcurl -lEGL -lglapi -ldrm_nouveau -lz -lnx -lm
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
@@ -152,6 +164,7 @@ export HFILES_BIN	:=	$(addsuffix .h,$(subst .,_,$(BINFILES)))
 
 export INCLUDE	:=	$(foreach dir,$(INCLUDES),-I$(CURDIR)/$(dir)) \
 			$(foreach dir,$(LIBDIRS),-I$(dir)/include) \
+			-Iinclude/external/boost \
 			-I$(CURDIR)/$(BUILD)
 
 export LIBPATHS	:=	$(foreach dir,$(LIBDIRS),-L$(dir)/lib)

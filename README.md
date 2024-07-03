@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="lavender.jpg" />
+  <img src="resources/icon/lavender.jpg" />
 </p>
 
 # lavender
