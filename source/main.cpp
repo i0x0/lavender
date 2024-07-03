@@ -16,8 +16,12 @@
 #include <arpa/inet.h>
 #include <sys/errno.h>
 #include <unistd.h>
-// #include "utils.cpp"
-// #include <boost/algorithm/string.hpp>
+#include <TrustWalletCore/TWCoinType.h>
+#include <TrustWalletCore/TWAnySigner.h>
+#include <TrustWalletCore/TWCoinTypeConfiguration.h>
+#include <TrustWalletCore/TWHDWallet.h>
+#include <TrustWalletCore/TWPrivateKey.h>
+#include <TrustWalletCore/TWString.h>
 
 using namespace std;
 namespace i18n = brls::i18n;    // for loadTranslations() and getStr()
@@ -44,6 +48,10 @@ int main(int argc, char **argv)
 
   rootFrame->setTitle("main/name"_i18n);
   rootFrame->setIcon(BOREALIS_ASSET("icon/lavender.jpg"));
+
+  TWHDWallet *walletNew = TWHDWalletCreate(128, TWStringCreateWithUTF8Bytes(""));
+  brls::Label *testLabel = new brls::Label(brls::LabelStyle::REGULAR, "main/more"_i18n, true);
+  testLabel->setText(TWStringUTF8Bytes(TWHDWalletMnemonic(walletNew)));
 
   brls::Application::pushView(rootFrame);
   while (brls::Application::mainLoop())
